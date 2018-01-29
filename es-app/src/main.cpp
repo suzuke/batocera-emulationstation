@@ -69,6 +69,9 @@ bool parseArgs(int argc, char* argv[], unsigned int* width, unsigned int* height
 		}else if(strcmp(argv[i], "--no-exit") == 0)
 		{
 			Settings::getInstance()->setBool("ShowExit", false);
+		}else if(strcmp(argv[i], "--no-loading-screen") == 0)
+		{
+			Settings::getInstance()->setBool("LoadingScreen", false);
 		}else if(strcmp(argv[i], "--debug") == 0)
 		{
 			Settings::getInstance()->setBool("Debug", true);
@@ -109,6 +112,7 @@ bool parseArgs(int argc, char* argv[], unsigned int* width, unsigned int* height
 				"--ignore-gamelist		ignore the gamelist (useful for troubleshooting)\n"
 				"--draw-framerate		display the framerate\n"
 				"--no-exit			don't show the exit option in the menu\n"
+				"--no-loading-screen		don't show the loading screen\n"
 				"--debug				more logging, show console on Windows\n"
 				"--scrape			scrape using command line interface\n"
 				"--windowed			not fullscreen, should be used with --resolution\n"
@@ -274,15 +278,15 @@ int main(int argc, char* argv[])
 	// other init
 	FileSorts::init(); // require locale
 	initMetadata(); // require locale
-	
-    Renderer::init(width, height);
+
+	Renderer::init(width, height);
 	Window window;
 	ViewController::init(&window);
 	window.pushGui(ViewController::get());
 
 	if(!scrape_cmdline)
-    {
-        if(!window.init(width, height, false))
+	{
+        	if(!window.init(width, height, false))
 		{
 			LOG(LogError) << "Window failed to initialize!";
 			return 1;
@@ -291,8 +295,8 @@ int main(int argc, char* argv[])
 		std::string glExts = (const char*)glGetString(GL_EXTENSIONS);
 		LOG(LogInfo) << "Checking available OpenGL extensions...";
 		LOG(LogInfo) << " ARB_texture_non_power_of_two: " << (glExts.find("ARB_texture_non_power_of_two") != std::string::npos ? "OK" : "MISSING");
-
-		window.renderLoadingScreen();
+		if (Settings::getInstance()->getBool("LoadingScreen"))
+			window.renderLoadingScreen();
 	}
 
 	// Initialize audio manager

@@ -15,6 +15,7 @@ std::vector<const char *> settings_dont_save = boost::assign::list_of
         ("DebugText")
         ("ParseGamelistOnly")
         ("ShowExit")
+	("LoadingScreen")
         ("Windowed")
         ("VSync")
         ("HideConsole")
@@ -49,6 +50,7 @@ void Settings::setDefaults() {
     mBoolMap["ParseGamelistOnly"] = false;
     mBoolMap["DrawFramerate"] = false;
     mBoolMap["ShowExit"] = true;
+    mBoolMap["LoadingScreen"] = true;
     mBoolMap["Windowed"] = false;
     mBoolMap["UseOSK"] = true;
 
